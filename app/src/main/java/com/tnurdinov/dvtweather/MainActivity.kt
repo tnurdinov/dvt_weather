@@ -12,11 +12,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.tnurdinov.dvtweather.ui.theme.DVTWeatherTheme
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+       val apiInterface = RetrofitInstance.getInstance().create(WeatherService::class.java)
+
+
+        GlobalScope.launch {
+            apiInterface.getFiveDayForeCast(25.2048, 55.2708)
+        }
         setContent {
             DVTWeatherTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->

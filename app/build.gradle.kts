@@ -20,6 +20,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val localProperties = org.jetbrains.kotlin.konan.properties.Properties()
+        localProperties.load(project.rootProject.file("local.properties").inputStream())
+        buildConfigField("String", "API_KEY", localProperties.getProperty("API_KEY"))// IF any
     }
 
     buildTypes {
@@ -42,6 +46,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -54,6 +59,12 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.squareup.retrofit2)
+    implementation(platform(libs.squareup.okhttp.bom))
+    implementation(libs.squareup.okhttp)
+    implementation(libs.squareup.okhttp.logging)
+    implementation(libs.google.gson)
+    implementation(libs.squareup.retrofit2.gson.converter)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
