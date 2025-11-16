@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.kapt)
 }
 
 android {
@@ -23,7 +25,7 @@ android {
 
         val localProperties = org.jetbrains.kotlin.konan.properties.Properties()
         localProperties.load(project.rootProject.file("local.properties").inputStream())
-        buildConfigField("String", "API_KEY", localProperties.getProperty("API_KEY"))// IF any
+        buildConfigField("String", "API_KEY", localProperties.getProperty("API_KEY"))
     }
 
     buildTypes {
@@ -65,6 +67,10 @@ dependencies {
     implementation(libs.squareup.okhttp.logging)
     implementation(libs.google.gson)
     implementation(libs.squareup.retrofit2.gson.converter)
+    implementation(libs.androidx.viewmodel.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
