@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.squareup.okhttp)
     implementation(libs.squareup.okhttp.logging)
     implementation(libs.google.gson)
+    implementation(libs.google.location.service)
     implementation(libs.squareup.retrofit2.gson.converter)
     implementation(libs.androidx.viewmodel.compose)
     implementation(libs.androidx.hilt.navigation.compose)
