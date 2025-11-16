@@ -1,6 +1,7 @@
 package com.tnurdinov.dvtweather
 
 import android.os.Bundle
+import android.view.WindowInsets
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -14,8 +15,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -67,6 +71,7 @@ fun WeatherForecastScreen(weatherViewModel: WeatherViewModel = hiltViewModel()) 
                     )
                 )
             )
+            .safeContentPadding()
     ) {
         Column(
             modifier = Modifier
@@ -75,14 +80,14 @@ fun WeatherForecastScreen(weatherViewModel: WeatherViewModel = hiltViewModel()) 
         ) {
             Text(
                 text = "5 Day Forecast",
-                fontSize = 24.sp,
+                fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
             weatherForecast.list.forEach { weather ->
-                WeatherDayCard(weather)
+                WeatherCard()
                 Spacer(modifier = Modifier.height(12.dp))
             }
         }
@@ -90,58 +95,68 @@ fun WeatherForecastScreen(weatherViewModel: WeatherViewModel = hiltViewModel()) 
 }
 
 @Composable
-fun WeatherDayCard(weather: Item) {
+fun WeatherCard(
+    day: String = "Monday",
+    temperature: Int = 20
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(80.dp),
-        shape = RoundedCornerShape(16.dp),
+            .height(140.dp),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 2.dp
+            defaultElevation = 4.dp
         )
     ) {
-        Row(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 20.dp, vertical = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .padding(24.dp)
         ) {
+            Text(
+                text = day,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color(0xFF1A1A1A),
+                modifier = Modifier.align(Alignment.TopStart)
+            )
+
+            Box(
+                modifier = Modifier
+                    .size(56.dp)
+                    .align(Alignment.CenterStart)
+                    .background(
+                        brush = Brush.radialGradient(
+                            colors = listOf(
+                                Color(0xFFFFC107),
+                                Color(0xFFFFA000)
+                            )
+                        ),
+                        shape = CircleShape
+                    )
+            )
             Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.align(Alignment.CenterEnd),
+                verticalAlignment = Alignment.Top
             ) {
-                // Sun icon (you'll need to add your own sun icon drawable)
-                Box(
-                    modifier = Modifier
-                        .size(48.dp)
-                        .background(Color(0xFFFFB74D), shape = RoundedCornerShape(24.dp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    // Replace with actual icon
-                    Text(text = "☀️", fontSize = 24.sp)
-                }
-
-                Spacer(modifier = Modifier.width(16.dp))
-
                 Text(
-                    text = "${weather.main!!.feelsLike}",
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Color(0xFF212121)
+                    text = "$temperature",
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF1A1A1A),
+                    lineHeight = 64.sp
+                )
+                Text(
+                    text = "°",
+                    fontSize = 36.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF1A1A1A),
+                    modifier = Modifier.padding(top = 4.dp)
                 )
             }
-
-            Text(
-                text = "${weather.weather[0].main}°",
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF212121)
-            )
         }
     }
 }
