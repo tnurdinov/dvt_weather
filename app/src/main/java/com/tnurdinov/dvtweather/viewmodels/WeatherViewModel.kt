@@ -19,14 +19,11 @@ class WeatherViewModel @Inject constructor(private val weatherRepository: Weathe
     private val _weatherResponse = mutableStateOf<List<DayForecast>>(emptyList<DayForecast>())
     val weatherResponse: State<List<DayForecast>> = _weatherResponse
 
-    init {
-        getWeatherForeCast()
-    }
 
-    private fun getWeatherForeCast() {
+    fun getWeatherForeCast(lat: Double = 40.7128, lon: Double = 74.0060) {
         viewModelScope.launch {
 
-            val weatherForecast = weatherRepository.getWeatherForecast().body()
+            val weatherForecast = weatherRepository.getWeatherForecast(lat, lon).body()
             val fiveDayForecast = get5DayForecast(weatherForecast!!)
 
             _weatherResponse.value = fiveDayForecast

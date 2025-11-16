@@ -11,7 +11,7 @@ class WeatherRepository @Inject constructor() {
         WeatherService.create()
     }
 
-    suspend fun getWeatherForecast(): Response<WeatherForecast> {
-        return weatherService.getFiveDayForeCast(25.2048, 55.2708)
+    suspend fun getWeatherForecast(lat: Double, lon: Double): Response<WeatherForecast> {
+        return weatherService.getFiveDayForeCast(lat, lon)
     }
 }

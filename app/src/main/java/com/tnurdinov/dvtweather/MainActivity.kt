@@ -50,10 +50,10 @@ import com.tnurdinov.dvtweather.ui.theme.DVTWeatherTheme
 import com.tnurdinov.dvtweather.viewmodels.WeatherViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
+private lateinit var fusedLocationClient: FusedLocationProviderClient
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,6 +115,15 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun WeatherForecastScreen(weatherViewModel: WeatherViewModel = hiltViewModel()) {
     val weatherForecast = weatherViewModel.weatherResponse.value
+
+    fusedLocationClient.lastLocation
+        .addOnSuccessListener { location: Location? ->
+            if (location != null) {
+                weatherViewModel.getWeatherForeCast(location.latitude, location.longitude)
+            } else {
+                weatherViewModel.getWeatherForeCast()
+            }
+        }
 
     Box(
         modifier = Modifier
@@ -181,7 +190,7 @@ fun WeatherCard(forecast: DayForecast) {
             )
             Box(
                 modifier = Modifier
-                    .padding(top = 8.dp)
+                    .padding(top = 16.dp)
             ) {
             WeatherIcon(forecast.icon)
                 }
@@ -216,7 +225,7 @@ fun WeatherIcon(iconCode: String) {
         Image(
             painter = painterResource(id = drawableId),
             contentDescription = "Weather icon",
-            modifier = Modifier.size(72.dp)
+            modifier = Modifier.size(56.dp)
         )
     }
 }
